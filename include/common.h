@@ -18,6 +18,10 @@ class Bytecode {
         mul_i32 = 0x05,
         div_i32 = 0x06,
         rem_i32 = 0x07,
+        pop_i32 = 0x08,
+
+        call = 0x09,
+        ret = 0x0a,
     };
 };
 

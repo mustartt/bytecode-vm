@@ -13,7 +13,7 @@
 #define METHOD_POP(type) \
     type pop_##type() { \
         type value; \
-        sp -= sizeof(value); \
+        sp -= std::max(ALIGNMENT, sizeof(value)); \
         std::memcpy(&value, sp, sizeof(value)); \
         return value; \
     } \
@@ -21,7 +21,7 @@
 #define METHOD_PUSH(type) \
     void push(type value) { \
         std::memcpy(sp, &value, sizeof(value)); \
-        sp += sizeof(value); \
+        sp += std::max(ALIGNMENT, sizeof(value)); \
     } \
 
 #define METHOD_INSTR(type) \
@@ -35,7 +35,7 @@
 #define METHOD_CONST(type) \
     type read_const_##type(uint16_t offset) { \
         type value; \
-        std::memcpy(&value, &constant_pool[0] + offset, sizeof(value)); \
+        std::memcpy(&value, &constant_pool[0] + ALIGNMENT * offset, sizeof(value)); \
         return value; \
     } \
 
@@ -43,6 +43,7 @@
 namespace vm {
 
 constexpr size_t STACK_SIZE = 2 << 10; // 2kb stack size
+constexpr size_t ALIGNMENT = 4;
 
 class vm_proc;
 
@@ -70,8 +71,6 @@ class virtual_machine {
     vm_context &ctx;
     std::atomic<bool> shutdown;
 };
-
-
 
 }
 

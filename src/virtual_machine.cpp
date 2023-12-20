@@ -67,6 +67,10 @@ void vm_proc::eval_loop() {
                 push(std::bit_cast<uint32_t>(op1 % op2));
                 break;
             }
+            case Bytecode::pop_i32: {
+                pop_uint32_t();
+                break;
+            }
             default: {
                 BOOST_LOG_TRIVIAL(trace) << "fiber: " << boost::this_fiber::get_id()
                                          << " invalid state";

@@ -16,9 +16,10 @@ int main(int argc, char *argv[]) {
 
     virtual_machine::memory data{
         Bytecode::const_i32, 0x00, 0x00,
-        Bytecode::const_i32, 0x04, 0x00,
-        Bytecode::const_i32, 0x08, 0x00,
+        Bytecode::const_i32, 0x01, 0x00,
+        Bytecode::const_i32, 0x02, 0x00,
         Bytecode::add_i32,
+        Bytecode::pop_i32,
         Bytecode::halt,
     };
 
