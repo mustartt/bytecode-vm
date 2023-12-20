@@ -1,0 +1,42 @@
+
+enum optional<T> {
+    None,
+    Some(T)
+}
+
+func main(args: [str]) i32 {
+    let primitive_bool: bool = true
+    let primitive_int8: i8 = 1
+    let primitive_int16: i16 = 1
+    let primitive_int32: i32 = 1
+    let primitive_int64: i64 = 1
+    let primitive_f32: f32 = 1.0
+    let primitive_f64: f64 = 1.0
+
+    let primitive_tuple: (i32, i32) = (123, 456)
+
+    let array = new [i32; 50];
+    let array2: [i32] = array;
+    let array3: [i32] = new [1, 2, 3, 4, 5];
+
+    for n in array3 {
+        std::io::println(n)
+    }
+    std::io::println(array3[0])
+
+    let if_expr = if condition {
+        None
+    } else {
+        Some(1234)
+    }
+
+    let match_expr: i32 = match if_expr {
+        None => {
+            std::io::println("No result")
+            0
+        },
+        Some(n) => n + 1
+    }
+
+
+}

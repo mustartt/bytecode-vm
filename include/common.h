@@ -20,8 +20,20 @@ class Bytecode {
         rem_i32 = 0x07,
         pop_i32 = 0x08,
 
+        /**
+         * \brief \code call $offset \endcode
+         *
+         * Stack Effect: arg1, arg2, ..., func_addr -> res1, ...
+         *
+         * @param offset  the size (in bytes) of the arguments passed to the called function
+         * @param fund_addr address of the function called
+         */
         call = 0x09,
+
         ret = 0x0a,
+        load_addr = 0x0b,
+        load_rel_i32 = 0x0c,
+
     };
 };
 

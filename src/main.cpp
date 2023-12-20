@@ -4,28 +4,32 @@
 int main(int argc, char *argv[]) {
     using namespace vm;
 
-    virtual_machine::memory pool{
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
+    virtual_machine::cpool pool{
+        0,
+        1,
+        2,
+        12, // offset into the main memory to add()
     };
-    int val = 123;
-    std::memcpy(&pool[0] + 4, &val, sizeof(val));
-    val = 456;
-    std::memcpy(&pool[0] + 8, &val, sizeof(val));
 
     virtual_machine::memory data{
-        Bytecode::const_i32, 0x00, 0x00,
+        // main
         Bytecode::const_i32, 0x01, 0x00,
         Bytecode::const_i32, 0x02, 0x00,
-        Bytecode::add_i32,
-        Bytecode::pop_i32,
+
+        Bytecode::load_addr, 0x03, 0x00,
+        Bytecode::call, 0x8,
+
         Bytecode::halt,
+
+        // add(int a, int b) int
+        Bytecode::add_i32,
+        Bytecode::ret,
     };
 
     vm_context ctx(4);
     virtual_machine vm(ctx, std::move(pool), std::move(data));
     int ec = vm.start_execution();
 
+    BOOST_LOG_TRIVIAL(trace) << "vm finished with exit code " << ec;
     return ec;
 }

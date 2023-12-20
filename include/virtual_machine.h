@@ -35,7 +35,7 @@
 #define METHOD_CONST(type) \
     type read_const_##type(uint16_t offset) { \
         type value; \
-        std::memcpy(&value, &constant_pool[0] + ALIGNMENT * offset, sizeof(value)); \
+        std::memcpy(&value, &constant_pool[offset], sizeof(value)); \
         return value; \
     } \
 
@@ -50,8 +50,9 @@ class vm_proc;
 class virtual_machine {
   public:
     using memory = std::vector<uint8_t>;
+    using cpool = std::vector<uint64_t>;
 
-    explicit virtual_machine(vm_context &ctx, memory const_pool, memory data)
+    explicit virtual_machine(vm_context &ctx, cpool const_pool, memory data)
         : program_data(std::move(data)), constant_pool(std::move(const_pool)), ctx(ctx) {}
   public:
     int start_execution();
@@ -66,7 +67,8 @@ class virtual_machine {
 
   private:
     memory program_data;  // uses uint8_t* to read
-    memory constant_pool; // uses uint16_t to offset into
+    cpool constant_pool; // uses uint16_t to offset into
+
   private:
     vm_context &ctx;
     std::atomic<bool> shutdown;
