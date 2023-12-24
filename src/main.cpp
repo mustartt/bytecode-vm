@@ -1,5 +1,8 @@
+#include <iostream>
 
 #include "virtual_machine.h"
+
+using namespace vm;
 
 int main(int argc, char *argv[]) {
     using namespace vm;
