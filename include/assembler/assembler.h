@@ -36,15 +36,15 @@ class src_loc {
 class token_type {
   public:
     enum type : uint8_t {
-      eof = 0,
-      whitespace = 1,
-      comment = 2,
-      label = 3,
-      identifier = 4,
-      numeric = 5,
-      constpool = 6,
-      line_return = 7,
-      string = 8,
+        eof = 0,
+        whitespace = 1,
+        comment = 2,
+        label = 3,
+        identifier = 4,
+        numeric = 5,
+        constpool = 6,
+        line_return = 7,
+        string = 8,
     };
   public:
     explicit token_type(type t) : t(t) {}

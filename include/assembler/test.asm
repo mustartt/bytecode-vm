@@ -1,4 +1,4 @@
-1.234
+include other.asm
 
 section text
 
