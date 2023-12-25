@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.20)
 project(bytecode_vm)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(Boost 1.74 COMPONENTS fiber log REQUIRED)
 find_package(GTest REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
@@ -13,6 +13,7 @@ include_directories(include)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GTEST_INCLUDE_DIRS})
 
+# target bytecode_vm
 add_executable(
         bytecode_vm
         src/main.cpp
@@ -26,6 +27,15 @@ add_executable(
 )
 target_link_libraries(bytecode_vm ${Boost_LIBRARIES})
 
+# target assembler
+add_executable(
+        assembler
+        include/assembler/assembler.h
+        src/assembler/assembler.cpp
+)
+target_link_libraries(assembler ${Boost_LIBRARIES})
+
+# target tests
 enable_testing()
 add_executable(
         main_test

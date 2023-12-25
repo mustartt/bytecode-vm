@@ -12,8 +12,8 @@ namespace vm {
 int virtual_machine::start_execution() {
     int exit_code = 0;
     ctx.start_parent([&exit_code, this] {
-        vm_proc proc(*this, &program_data[0]);
-        exit_code = proc.eval_loop();
+      vm_proc proc(*this, &program_data[0]);
+      exit_code = proc.eval_loop();
     });
     return exit_code;
 }
@@ -110,7 +110,7 @@ void vm_proc::push_frame() {
 }
 
 void vm_proc::pop_frame() {
-    auto [old_fp, call_site] = stack_frame.back();
+    auto[old_fp, call_site] = stack_frame.back();
     fp = old_fp;
     pc = call_site;
     stack_frame.pop_back();
