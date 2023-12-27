@@ -44,11 +44,11 @@ class parser {
 
     void consume_newline_comment(std::vector<std::string> &comments) {
         if (!expect(token_type::newline) && !expect(token_type::comment)) {
-            throw std::runtime_error("expected <line-return>");
+            throw std::runtime_error("expected <line-return> " + get_src_loc().str());
         }
         while (expect(token_type::newline) || expect(token_type::comment)) {
             if (expect(token_type::comment)) {
-                comments.push_back(lookahead_lexeme());
+                comments.push_back(get_lexeme());
             }
             next();
         }
@@ -57,10 +57,10 @@ class parser {
     [[nodiscard]] bool expect(token_type::type type) const {
         return type == std::get<0>(lookahead).get();
     }
-    [[nodiscard]] const std::string &lookahead_lexeme() const {
+    [[nodiscard]] const std::string &get_lexeme() const {
         return std::get<1>(lookahead);
     }
-    [[nodiscard]] const src_loc &lookahead_src_loc() const {
+    [[nodiscard]] const src_loc &get_src_loc() const {
         return std::get<2>(lookahead);
     }
   private:

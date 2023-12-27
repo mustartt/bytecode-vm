@@ -10,6 +10,7 @@
 #include <vector>
 #include <unordered_map>
 #include <variant>
+#include <sstream>
 
 namespace vm {
 
@@ -20,8 +21,13 @@ class src_loc {
     src_loc(size_t start_line, size_t start_col,
             size_t end_line, size_t end_col) : start_line(start_line), start_col(start_col),
                                                end_line(end_line), end_col(end_col) {}
+    std::string str() const {
+        std::ostringstream os;
+        os << *this;
+        return os.str();
+    }
     friend std::ostream &operator<<(std::ostream &os, const src_loc &loc) {
-        os << "(start: " << loc.start_line << ":" << loc.start_col << " end: " << loc.end_line
+        os << "(" << loc.start_line << ":" << loc.start_col << "," << loc.end_line
            << ":" << loc.end_col << ")";
         return os;
     }

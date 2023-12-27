@@ -8,17 +8,17 @@ namespace vm {
 
 module parser::parse_module() {
     if (!expect(token_type::identifier)) {
-        throw std::runtime_error("module: expected <identifier>");
+        throw std::runtime_error("module: expected <identifier> " + get_src_loc().str());
     }
-    if (lookahead_lexeme() != "module") {
-        throw std::runtime_error("module: expected keyword <module>");
+    if (get_lexeme() != "module") {
+        throw std::runtime_error("module: expected keyword <module> " + get_src_loc().str());
     }
 
     next();
     if (!expect(token_type::identifier)) {
-        throw std::runtime_error("module: expected <identifier>");
+        throw std::runtime_error("module: expected <identifier> " + get_src_loc().str());
     }
-    std::string module_name = lookahead_lexeme();
+    std::string module_name = get_lexeme();
     module parsed_module(std::move(module_name));
 
     next(); // newline
@@ -27,16 +27,16 @@ module parser::parse_module() {
     while (expect(token_type::include)) {
         next();
         if (!expect(token_type::string)) {
-            throw std::runtime_error("include: expected <string>");
+            throw std::runtime_error("include: expected <string> " + get_src_loc().str());
         }
-        parsed_module.paths().push_back(lookahead_lexeme());
+        parsed_module.paths().push_back(get_lexeme());
         next();
         consume_newline();
     }
 
     while (expect(token_type::section)) {
         next();
-        std::string section_name = lookahead_lexeme();
+        std::string section_name = get_lexeme();
         next();
         consume_newline();
 
@@ -45,7 +45,7 @@ module parser::parse_module() {
     }
 
     if (!expect(token_type::eof)) {
-        throw std::runtime_error("module: did not reach eof");
+        throw std::runtime_error("module: did not reach eof " + get_src_loc().str());
     }
 
     return parsed_module;
@@ -65,9 +65,9 @@ section parser::parse_section() {
 
 void parser::parse_instr(section &s) {
     if (!expect(token_type::identifier)) {
-        throw std::runtime_error("instr: expected op as <identifier>");
+        throw std::runtime_error("instr: expected op as <identifier> " + get_src_loc().str());
     }
-    auto op = lookahead_lexeme();
+    auto op = get_lexeme();
     std::vector<token> operands;
     next();
     while (!expect(token_type::comment) && !expect(token_type::newline)) {
@@ -86,9 +86,9 @@ void parser::parse_instr(section &s) {
 
 void parser::parse_label(section &s) {
     if (!expect(token_type::label)) {
-        throw std::runtime_error("label: expected <label>");
+        throw std::runtime_error("label: expected <label> " + get_src_loc().str());
     }
-    auto label = lookahead_lexeme();
+    auto label = get_lexeme();
     next();
 
     std::vector<std::string> comments;
