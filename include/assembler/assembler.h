@@ -6,38 +6,12 @@
 #define BYTECODE_VM_INCLUDE_ASSEMBLER_ASSEMBLER_H_
 
 #include <optional>
-#include <ostream>
 #include <vector>
 #include <unordered_map>
 
-#include "src_loc.h"
+#include "token.h"
 
 namespace vm {
-
-class token_type {
-  public:
-    enum type : uint8_t {
-        eof = 0,
-        whitespace = 1,
-        comment = 2,
-        label = 3,
-        identifier = 4,
-        numeric = 5,
-        constpool = 6,
-        newline = 7,
-        string = 8,
-        section = 9,
-        include = 10
-    };
-  public:
-    constexpr token_type() : t(eof) {}
-    explicit token_type(type t) : t(t) {}
-    [[nodiscard]] type get() const { return t; }
-  private:
-    type t;
-};
-
-using token = std::tuple<token_type, std::string, src_loc>;
 
 class instruction {
   public:

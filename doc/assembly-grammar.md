@@ -34,7 +34,7 @@ symbol_table:
     [symbol:offset] offset into the data table 
 data:
     
-constpool:
+offset:
 
 comments:
     [offset:comment] 

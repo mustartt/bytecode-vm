@@ -16,7 +16,7 @@ tokenizer::tokenizer(std::istream &stream) : stream(stream) {
     patterns.emplace_back(token_type::include, "^(include)");
     patterns.emplace_back(token_type::label, R"(^([_a-zA-Z][a-zA-Z0-9_\(\)\[\]\<\>]*):)");
     patterns.emplace_back(token_type::identifier, R"(^([_a-zA-Z][a-zA-Z0-9_\(\)\[\]\<\>]+))");
-    patterns.emplace_back(token_type::constpool, "^\\$(\\d+)");
+    patterns.emplace_back(token_type::offset, "^\\$(\\d+)");
     patterns.emplace_back(token_type::numeric, R"(^([-+]?\d+(\.\d+)?([eE][-+]?\d+)?))");
     patterns.emplace_back(token_type::string, R"(^\"(.*)\")");
 }

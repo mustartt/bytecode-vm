@@ -37,6 +37,8 @@ add_library(
         src/assembler/parser.cpp
         include/assembler/src_loc.h
         src/assembler/src_loc.cpp
+        include/assembler/token.h
+        src/assembler/token.cpp
 )
 target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
 
@@ -52,7 +54,7 @@ enable_testing()
 add_executable(
         main_test
         test/test_main.cpp
-        test/assembler/assembler_test.cpp
+        test/assembler/src_loc_test.cpp
 )
 target_link_libraries(main_test GTest::gtest_main)
 target_link_libraries(main_test assembly)

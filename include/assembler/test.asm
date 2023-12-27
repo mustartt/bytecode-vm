@@ -29,15 +29,15 @@ section data
     unbuf_chan_identifier   unbufchan
 
 section readonly
-    constpool 0 str "Hello World\n"
-    constpool 1 i32 0
-    constpool 2 i32 10
-    constpool 3 i32 25
-    constpool 4 addr main([str])i32
-    constpool 5 addr println(str)
-    constpool 6 addr dyn_func1
-    constpool 7 addr dyn_func2
-    constpool 8 addr dyn_func3
-    constpool 9 addr dyn_func4
+    offset 0 str "Hello World\n"
+    offset 1 i32 0
+    offset 2 i32 10
+    offset 3 i32 25
+    offset 4 addr main([str])i32
+    offset 5 addr println(str)
+    offset 6 addr dyn_func1
+    offset 7 addr dyn_func2
+    offset 8 addr dyn_func3
+    offset 9 addr dyn_func4
 
 
