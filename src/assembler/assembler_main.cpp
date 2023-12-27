@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "tokenizer.h"
-#include "parser.h"
+#include "assembler/tokenizer.h"
+#include "assembler/parser.h"
 
 using namespace vm;
 

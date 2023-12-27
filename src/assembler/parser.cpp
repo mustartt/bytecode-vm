@@ -2,7 +2,7 @@
 // Created by henry on 12/25/2023.
 //
 
-#include "parser.h"
+#include "assembler/parser.h"
 
 namespace vm {
 

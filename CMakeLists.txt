@@ -28,23 +28,32 @@ add_executable(
 target_link_libraries(bytecode_vm ${Boost_LIBRARIES})
 
 # target assembler
+add_library(
+        assembly
+        include/assembler/assembler.h
+        include/assembler/tokenizer.h
+        src/assembler/tokenizer.cpp
+        include/assembler/parser.h
+        src/assembler/parser.cpp
+        include/assembler/src_loc.h
+        src/assembler/src_loc.cpp
+)
+target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
+
 add_executable(
         assembler
-        src/assembler/assembler.h
-        src/assembler/assembler.cpp
-        src/assembler/tokenizer.h
-        src/assembler/tokenizer.cpp
-        src/assembler/parser.h
-        src/assembler/parser.cpp
+        src/assembler/assembler_main.cpp
 )
-target_link_libraries(assembler ${Boost_LIBRARIES})
+target_link_libraries(assembler PUBLIC ${Boost_LIBRARIES})
+target_link_libraries(assembler PUBLIC assembly)
 
-# target tests
+# target main tests
 enable_testing()
 add_executable(
         main_test
         test/test_main.cpp
-        test/common/shared_object_test.cpp
+        test/assembler/assembler_test.cpp
 )
 target_link_libraries(main_test GTest::gtest_main)
+target_link_libraries(main_test assembly)
 gtest_discover_tests(main_test)

@@ -9,32 +9,10 @@
 #include <ostream>
 #include <vector>
 #include <unordered_map>
-#include <variant>
-#include <sstream>
+
+#include "src_loc.h"
 
 namespace vm {
-
-class src_loc {
-  public:
-    constexpr src_loc() noexcept: start_line(0), start_col(0),
-                                  end_line(0), end_col(0) {}
-    src_loc(size_t start_line, size_t start_col,
-            size_t end_line, size_t end_col) : start_line(start_line), start_col(start_col),
-                                               end_line(end_line), end_col(end_col) {}
-    std::string str() const {
-        std::ostringstream os;
-        os << *this;
-        return os.str();
-    }
-    friend std::ostream &operator<<(std::ostream &os, const src_loc &loc) {
-        os << "(" << loc.start_line << ":" << loc.start_col << "," << loc.end_line
-           << ":" << loc.end_col << ")";
-        return os;
-    }
-  public:
-    size_t start_line, start_col;
-    size_t end_line, end_col;
-};
 
 class token_type {
   public:
