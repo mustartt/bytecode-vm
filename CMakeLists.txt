@@ -30,8 +30,12 @@ target_link_libraries(bytecode_vm ${Boost_LIBRARIES})
 # target assembler
 add_executable(
         assembler
-        include/assembler/assembler.h
+        src/assembler/assembler.h
         src/assembler/assembler.cpp
+        src/assembler/tokenizer.h
+        src/assembler/tokenizer.cpp
+        src/assembler/parser.h
+        src/assembler/parser.cpp
 )
 target_link_libraries(assembler ${Boost_LIBRARIES})
 

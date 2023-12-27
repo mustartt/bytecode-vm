@@ -1,12 +1,16 @@
-include other.asm
+module some_module
+
+include "other.asm"
 
 section text
 
 _start:
-    const_ptr $4
-    call
-    halt
+    const_ptr $4    ; loads main([str])i32 onto call stack
+    call            ; calls main function
 
+    const_i32 $1    ; loads exit_code 1
+    halt            ; halts thread
+                    ; return exit_code
 
 main([str])i32:
     const_str $0
