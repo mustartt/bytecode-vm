@@ -16,16 +16,18 @@ namespace vm {
 
 class instruction {
   public:
-    instruction(std::string op, std::vector<token> operands)
-        : op(std::move(op)), operands(std::move(operands)) {}
+    instruction(std::string op, src_loc loc, std::vector<token> operands)
+        : op(std::move(op)), loc(std::move(loc)), operands(std::move(operands)) {}
   public:
     [[nodiscard]] const std::string &get_op() const noexcept { return op; }
+    [[nodiscard]] const src_loc &get_src_loc() const noexcept { return loc; }
     [[nodiscard]] const std::vector<token> &get_operands() const noexcept { return operands; }
     [[nodiscard]] const token &get_operands(int idx) const noexcept { return operands[idx]; }
     [[nodiscard]] size_t size() const noexcept { return operands.size(); }
 
   private:
     std::string op;
+    src_loc loc;
     std::vector<token> operands;
 };
 
@@ -47,6 +49,10 @@ class section {
         }
         labels[label] = current_offset();
     }
+    const auto &get_labels() const { return labels; }
+    const auto &get_instructions() const { return instructions; }
+    const auto &get_comments() const { return comments; }
+
   private:
     std::vector<instruction> instructions;
     std::unordered_map<label, offset> labels;
@@ -57,6 +63,11 @@ class module {
   public:
     explicit module(std::string module_name) : module_name(std::move(module_name)) {}
     std::vector<std::string> &paths() noexcept { return include_paths; }
+    [[nodiscard]] const std::string &get_module_name() const noexcept { return module_name; }
+    [[nodiscard]] const std::vector<std::string> &get_includes() const noexcept { return include_paths; }
+    [[nodiscard]] const std::unordered_map<std::string, section> &
+    get_sections() const noexcept { return sections; }
+
     void add_section(const std::string &name, section sect) {
         if (sections.contains(name)) {
             throw std::runtime_error("duplicate section name");
@@ -88,6 +99,13 @@ class symbol_entry {
 
 class bytecode_format {
   public:
+    bytecode_format() = default;
+    bytecode_format(const bytecode_format &other) noexcept = delete;
+    bytecode_format(bytecode_format &&other) noexcept = default;
+    bytecode_format &operator=(const bytecode_format &other) noexcept = delete;
+    bytecode_format &operator=(bytecode_format &&other) noexcept = default;
+
+  public:
     void serialize(std::ostream &os);
     void deserialize(std::istream &is);
 
@@ -109,7 +127,11 @@ class assembler {
         bytecode.data.reserve(1);
     };
   public:
-    const bytecode_format &get_bytecode() const { return bytecode; }
+    bytecode_format &get_bytecode() { return bytecode; }
+
+    void register_module_name(const std::string &name) {
+        bytecode.metadata = "module_name: " + name;
+    }
 
     // instructions
     void emit_halt();
@@ -122,8 +144,8 @@ class assembler {
     void emit_pop_i32();
     void emit_call(uint16_t arg_size);
     void emit_ret();
-    void load_addr(uint16_t index);
-    void load_rel_i32(uint16_t offset);
+    void emit_load_addr(uint16_t index);
+    void emit_load_rel_i32(uint16_t offset);
 
     // data
     void write_unaligned_data8(uint8_t value) { write_data(&value, sizeof(value)); }

@@ -39,10 +39,14 @@ void bytecode_format::serialize(std::ostream &os) {
         os.write(reinterpret_cast<const char *>(&entry.second), sizeof(symbol_entry));
     }
 
+    os << '@';
+
     // Serialize data
     uint64_t data_size = data.size();
     os.write(reinterpret_cast<const char *>(&data_size), sizeof(uint64_t));
     os.write(reinterpret_cast<const char *>(data.data()), data_size);
+
+    os << '#';
 
     // Serialize constpool
     uint64_t const_pool_size = constpool.size();
@@ -90,11 +94,17 @@ void bytecode_format::deserialize(std::istream &is) {
         symbol_table[key] = value;
     }
 
+    char data_start;
+    is >> data_start;
+
     // Deserialize data
     uint64_t data_size;
     is.read(reinterpret_cast<char *>(&data_size), sizeof(uint64_t));
     data.resize(data_size);
     is.read(reinterpret_cast<char *>(data.data()), data_size);
+
+    char data_end;
+    is >> data_end;
 
     // Deserialize constpool
     uint64_t const_pool_size;

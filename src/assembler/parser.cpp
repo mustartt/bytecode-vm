@@ -68,6 +68,7 @@ void parser::parse_instr(section &s) {
         throw std::runtime_error("instr: expected op as <identifier> " + get_src_loc().str());
     }
     auto op = get_lexeme();
+    auto loc = get_src_loc();
     std::vector<token> operands;
     next();
     while (!expect(token_type::comment) && !expect(token_type::newline)) {
@@ -80,7 +81,7 @@ void parser::parse_instr(section &s) {
     for (auto &&comment: comments) {
         s.insert_comments(std::move(comment));
     }
-    instruction instr(std::move(op), std::move(operands));
+    instruction instr(std::move(op), loc, std::move(operands));
     s.insert_instr(std::move(instr));
 }
 

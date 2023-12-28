@@ -41,6 +41,8 @@ add_library(
         src/assembler/token.cpp
         src/assembler/assembler.cpp
         src/assembler/bytecode_format.cpp
+        include/assembler/bytecode_compiler.h
+        src/assembler/bytecode_compiler.cpp
 )
 target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
 

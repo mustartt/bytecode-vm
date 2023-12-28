@@ -22,23 +22,23 @@ main([str])i32:
 
 
 section data
-    vtable_identifier       u16         $6 $7 $8 ; offset into the const pool
-    mutex_identifier        mutex
-    condvar_identifier      condvar
-    buf_chan_identifier     bufchan
-    unbuf_chan_identifier   unbufchan
+    reserve vtable_identifier       u16         $6 $7 $8 ; offset into the const pool
+    reserve mutex_identifier        mutex
+    reserve condvar_identifier      condvar
+    reserve buf_chan_identifier     bufchan
+    reserve unbuf_chan_identifier   unbufchan
 
 section readonly
-    constpool 0 str "Hello World\n"
-    constpool 1 i32 0
-    constpool 2 i32 10
-    constpool 3 i32 25
-    constpool 4 addr main([str])i32
-    constpool 5 addr println(str)
-    constpool 6 addr dyn_func1
-    constpool 7 addr dyn_func2
-    constpool 8 addr dyn_func3
-    constpool 9 addr other_func     ; unresolved function outside this module
+    const 0 str "Hello World\n"
+    const 1 i32 0
+    const 2 i32 10
+    const 3 i32 25
+    const 4 addr main([str])i32
+    const 5 addr println(str)
+    const 6 addr dyn_func1
+    const 7 addr dyn_func2
+    const 8 addr dyn_func3
+    const 9 addr other_func     ; unresolved function outside this module
 
 
 
