@@ -30,12 +30,20 @@ operand -> NUMERIC | CONSTPOOL | IDENTIFIER | STRING
 # Bytecode File Format
 
 ```
-symbol_table:
-    [symbol:offset] offset into the data table 
-data:
+dependency:
     
-offset:
-
+symbol_table:
+    [symbol]:       offset into the data table
+    resolved:       is the symbol resolved
+    const_offset:   offset into the constpool section if not resolved
+    data_offset:    offset into the data section if it is resolved
+    
+data:
+    code and data section
+constpool:
+    [offset]: 
+    
 comments:
     [offset:comment] 
+    
 ```

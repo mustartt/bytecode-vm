@@ -8,6 +8,7 @@
 #include <optional>
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 #include "token.h"
 
@@ -66,6 +67,41 @@ class module {
     std::string module_name;
     std::vector<std::string> include_paths;
     std::unordered_map<std::string, section> sections;
+};
+
+class bytecode_format {
+  private:
+    class symbol_entry {
+      public:
+        symbol_entry()
+            : resolved(false), const_offset(0), data_offset(0) {};
+        symbol_entry(bool resolved, size_t constOffset, size_t dataOffset)
+            : resolved(resolved), const_offset(constOffset), data_offset(dataOffset) {};
+        bool operator==(const symbol_entry &other) const {
+            return other.resolved == resolved &&
+                other.const_offset == const_offset &&
+                other.data_offset == data_offset;
+        }
+      public:
+        bool resolved;
+        std::size_t const_offset;
+        std::size_t data_offset;
+    };
+  public:
+    void serialize(std::ostream &os);
+    void deserialize(std::istream &is);
+
+  public:
+    std::string metadata;
+    std::vector<std::string> dependency;
+    std::map<std::string, symbol_entry> symbol_table;
+    std::vector<uint8_t> data;
+    std::vector<uint64_t> constpool;
+    std::map<std::size_t, std::string> comments;
+};
+
+class assembler {
+
 };
 
 }
