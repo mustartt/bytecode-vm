@@ -5,6 +5,8 @@
 #ifndef BYTECODE_VM_INCLUDE_COMMON_H_
 #define BYTECODE_VM_INCLUDE_COMMON_H_
 
+#include <cstdint>
+
 namespace vm {
 
 class Bytecode {
@@ -21,11 +23,11 @@ class Bytecode {
         pop_i32 = 0x08,
 
         /**
-         * \brief \code call $offset \endcode
+         * \brief \code call $arg_size \endcode
          *
          * Stack Effect: arg1, arg2, ..., func_addr -> res1, ...
          *
-         * @param offset  the size (in bytes) of the arguments passed to the called function
+         * @param arg_size  the size (in bytes) of the arguments passed to the called function
          * @param fund_addr address of the function called
          */
         call = 0x09,

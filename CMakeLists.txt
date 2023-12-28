@@ -40,6 +40,7 @@ add_library(
         include/assembler/token.h
         src/assembler/token.cpp
         src/assembler/assembler.cpp
+        src/assembler/bytecode_format.cpp
 )
 target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
 
@@ -57,6 +58,7 @@ add_executable(
         test/test_main.cpp
         test/assembler/src_loc_test.cpp
         test/assembler/bytecode_format_test.cpp
+        test/assembler/assembler_test.cpp
 )
 target_link_libraries(main_test GTest::gtest_main)
 target_link_libraries(main_test assembly)

@@ -69,24 +69,24 @@ class module {
     std::unordered_map<std::string, section> sections;
 };
 
+class symbol_entry {
+  public:
+    symbol_entry()
+        : resolved(false), const_offset(0), data_offset(0) {};
+    symbol_entry(bool resolved, size_t constOffset, size_t dataOffset)
+        : resolved(resolved), const_offset(constOffset), data_offset(dataOffset) {};
+    bool operator==(const symbol_entry &other) const {
+        return other.resolved == resolved &&
+            other.const_offset == const_offset &&
+            other.data_offset == data_offset;
+    }
+  public:
+    bool resolved;
+    std::size_t const_offset;
+    std::size_t data_offset;
+};
+
 class bytecode_format {
-  private:
-    class symbol_entry {
-      public:
-        symbol_entry()
-            : resolved(false), const_offset(0), data_offset(0) {};
-        symbol_entry(bool resolved, size_t constOffset, size_t dataOffset)
-            : resolved(resolved), const_offset(constOffset), data_offset(dataOffset) {};
-        bool operator==(const symbol_entry &other) const {
-            return other.resolved == resolved &&
-                other.const_offset == const_offset &&
-                other.data_offset == data_offset;
-        }
-      public:
-        bool resolved;
-        std::size_t const_offset;
-        std::size_t data_offset;
-    };
   public:
     void serialize(std::ostream &os);
     void deserialize(std::istream &is);
@@ -97,11 +97,62 @@ class bytecode_format {
     std::map<std::string, symbol_entry> symbol_table;
     std::vector<uint8_t> data;
     std::vector<uint64_t> constpool;
-    std::map<std::size_t, std::string> comments;
+    std::map<std::size_t, std::string> data_comments;
+    std::map<std::size_t, std::string> const_comments;
 };
 
-class assembler {
+constexpr uint64_t Assembler_Alignment = 8;
 
+class assembler {
+  public:
+    explicit assembler() {
+        bytecode.data.reserve(1);
+    };
+  public:
+    const bytecode_format &get_bytecode() const { return bytecode; }
+
+    // instructions
+    void emit_halt();
+    void emit_const_i32(uint16_t index);
+    void emit_add_i32();
+    void emit_sub_i32();
+    void emit_mul_i32();
+    void emit_div_i32();
+    void emit_rem_i32();
+    void emit_pop_i32();
+    void emit_call(uint16_t arg_size);
+    void emit_ret();
+    void load_addr(uint16_t index);
+    void load_rel_i32(uint16_t offset);
+
+    // data
+    void write_unaligned_data8(uint8_t value) { write_data(&value, sizeof(value)); }
+    void write_unaligned_data16(uint16_t value) { write_data(&value, sizeof(value)); }
+    void write_unaligned_data32(uint32_t value) { write_data(&value, sizeof(value)); }
+    void write_unaligned_data64(uint64_t value) { write_data(&value, sizeof(value)); }
+
+    void reserve_aligned_data_var(const std::string &identifier, std::size_t bytes);
+
+    // const pool
+    void write_const_i32(std::size_t index, int32_t value);
+    void write_const_addr(std::size_t index, uint64_t value);
+    void write_const_addr(std::size_t index, const std::string &label);
+    void write_const_str(std::size_t index, const std::string &value);
+
+    // other
+    void register_label(const std::string &label);
+    void register_data_comment(const std::string &comment);
+    void register_const_comment(std::size_t index, const std::string &comment);
+
+  private:
+    void *reserve_data_bytes(std::size_t bytes);
+    void reserve_const(std::size_t index);
+    void write_data(void *value, std::size_t size);
+    [[nodiscard]] std::size_t data_offset() const { return bytecode.data.size(); }
+    void align_data();
+
+  private:
+    bytecode_format bytecode;
 };
 
 }
