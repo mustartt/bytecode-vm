@@ -9,6 +9,12 @@
 
 namespace vm {
 
+/**
+ * Core Data Types
+ *  Numbers: i8, i16, i32, i64, f32, f64
+ *  Reference: Shared Reference and Array
+ *  Sync: mutex, condvar, bufchan, unbufchan, barrier, waitgroup
+ */
 class Bytecode {
   public:
     enum Opcode : uint8_t {
@@ -21,6 +27,13 @@ class Bytecode {
         div_i32 = 0x06,
         rem_i32 = 0x07,
         pop_i32 = 0x08,
+
+        if_cmp_eq_i32,
+        if_cmp_ne_i32,
+        if_cmp_lt_i32,
+        if_cmp_gt_i32,
+        if_cmp_lte_i32,
+        if_cmp_gte_i32,
 
         /**
          * \brief \code call $arg_size \endcode

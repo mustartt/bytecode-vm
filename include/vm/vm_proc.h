@@ -15,10 +15,9 @@ class vm_proc {
     using call_site = uint8_t *;
     using frame = std::pair<frame_ptr, call_site>;
 
-    vm_proc(virtual_machine &vm, uint8_t *start) : vm(vm), pc(start) {
-        stack.resize(STACK_SIZE, 0);
-        fp = &stack[0];
-        sp = &stack[0];
+    vm_proc(virtual_machine &vm, uint8_t *start) : vm(vm), stack(STACK_SIZE), pc(start) {
+        fp = stack.data();
+        sp = stack.data();
         stack_frame.emplace_back(fp, pc);
     }
   public:
@@ -44,7 +43,7 @@ class vm_proc {
 
   private:
     virtual_machine &vm;
-    virtual_machine::memory stack;
+    memory stack;
     std::vector<frame> stack_frame;
   private:
     uint8_t *pc;

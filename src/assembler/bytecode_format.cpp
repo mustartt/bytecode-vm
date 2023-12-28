@@ -3,7 +3,7 @@
 //
 
 
-#include "assembler/assembler.h"
+#include "assembler/bytecode_format.h"
 
 namespace vm {
 

@@ -7,6 +7,7 @@
 
 #include "assembler.h"
 
+#include <optional>
 #include <regex>
 
 namespace vm {

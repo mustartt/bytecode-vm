@@ -6,26 +6,13 @@ find_package(Boost 1.74 COMPONENTS fiber log REQUIRED)
 find_package(GTest REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 --coverage")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include_directories(include)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GTEST_INCLUDE_DIRS})
-
-# target bytecode_vm
-add_executable(
-        bytecode_vm
-        src/main.cpp
-        src/vm_context.cpp
-        include/virtual_machine.h
-        include/common.h
-        include/vm_proc.h
-        include/vm_proc.h
-        src/virtual_machine.cpp
-        include/common/shared_object.h
-)
-target_link_libraries(bytecode_vm ${Boost_LIBRARIES})
 
 # target assembler
 add_library(
@@ -43,6 +30,7 @@ add_library(
         src/assembler/bytecode_format.cpp
         include/assembler/bytecode_compiler.h
         src/assembler/bytecode_compiler.cpp
+        include/assembler/bytecode_format.h
 )
 target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
 
@@ -52,6 +40,24 @@ add_executable(
 )
 target_link_libraries(assembler PUBLIC ${Boost_LIBRARIES})
 target_link_libraries(assembler PUBLIC assembly)
+
+
+# target bytecode_vm
+add_executable(
+        bytecode_vm
+        src/main.cpp
+        src/vm/vm_context.cpp
+        include/vm/virtual_machine.h
+        include/common.h
+        include/vm/vm_proc.h
+        include/vm/vm_proc.h
+        src/vm/virtual_machine.cpp
+        include/common/shared_object.h
+        include/vm/bytecode_linker.h
+        include/vm/memory.h
+)
+target_link_libraries(bytecode_vm PUBLIC ${Boost_LIBRARIES})
+target_link_libraries(bytecode_vm PUBLIC assembly)
 
 # target main tests
 enable_testing()

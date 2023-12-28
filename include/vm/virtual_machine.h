@@ -8,7 +8,9 @@
 #include <atomic>
 
 #include "common.h"
+#include "memory.h"
 #include "vm_context.h"
+#include "bytecode_linker.h"
 
 #define METHOD_POP(type) \
     type pop_##type() { \
@@ -49,16 +51,19 @@ class vm_proc;
 
 class virtual_machine {
   public:
-    using memory = std::vector<uint8_t>;
-    using cpool = std::vector<uint64_t>;
-
-    explicit virtual_machine(vm_context &ctx, cpool const_pool, memory data)
-        : program_data(std::move(data)), constant_pool(std::move(const_pool)), ctx(ctx) {}
+    explicit virtual_machine(vm_context &ctx)
+        : program_data(), constant_pool(),
+          ctx(ctx), linker(constant_pool) {}
   public:
+    /** @brief starts execution from the first byte of the first loaded module
+     */
     int start_execution();
 
   public:
-    memory &data() { return program_data; }
+    void load_module(const bytecode_format &bytecode) {
+        // todo: aquire global exclusive lock
+        program_data.push_back(linker.load_module(bytecode));
+    }
 
     METHOD_CONST(uint8_t);
     METHOD_CONST(uint16_t);
@@ -66,11 +71,11 @@ class virtual_machine {
     METHOD_CONST(uint64_t);
 
   private:
-    memory program_data;  // uses uint8_t* to read
+    std::vector<memory> program_data;  // uses uint8_t* to read
     cpool constant_pool; // uses uint16_t to offset into
 
-  private:
     vm_context &ctx;
+    bytecode_linker linker;
     std::atomic<bool> shutdown;
 };
 

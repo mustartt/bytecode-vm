@@ -4,16 +4,17 @@
 
 #include <boost/fiber/fiber.hpp>
 
-#include "vm_proc.h"
-#include "virtual_machine.h"
+#include "vm/vm_proc.h"
+#include "vm/virtual_machine.h"
 
 namespace vm {
 
 int virtual_machine::start_execution() {
+    BOOST_ASSERT_MSG(program_data.size() > 0, "No module loaded");
     int exit_code = 0;
     ctx.start_parent([&exit_code, this] {
-      vm_proc proc(*this, &program_data[0]);
-      exit_code = proc.eval_loop();
+        vm_proc proc(*this, program_data[0].data());
+        exit_code = proc.eval_loop();
     });
     return exit_code;
 }
@@ -72,8 +73,7 @@ int vm_proc::eval_loop() {
             }
             case Bytecode::load_addr: {
                 auto index = read_instr_uint16_t();
-                auto addr_offset = &vm.data()[0] + vm.read_const_uint64_t(index);
-                push(std::bit_cast<uint64_t>(addr_offset));
+                push(std::bit_cast<uint64_t>(vm.read_const_uint64_t(index)));
                 break;
             }
             case Bytecode::load_rel_i32: {
@@ -110,7 +110,7 @@ void vm_proc::push_frame() {
 }
 
 void vm_proc::pop_frame() {
-    auto[old_fp, call_site] = stack_frame.back();
+    auto [old_fp, call_site] = stack_frame.back();
     fp = old_fp;
     pc = call_site;
     stack_frame.pop_back();

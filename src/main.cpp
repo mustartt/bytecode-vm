@@ -1,36 +1,27 @@
 #include <iostream>
+#include <fstream>
 
-#include "virtual_machine.h"
+#include "vm/virtual_machine.h"
+#include "assembler/bytecode_compiler.h"
 
 using namespace vm;
 
 int main(int argc, char *argv[]) {
     using namespace vm;
 
-    virtual_machine::cpool pool{
-        0,
-        1,
-        2,
-        12, // offset into the main memory to add()
-    };
+    std::ifstream file("../test/example/example2.asm");
+    std::stringstream ss;
 
-    virtual_machine::memory data{
-        // main
-        Bytecode::const_i32, 0x01, 0x00,
-        Bytecode::const_i32, 0x02, 0x00,
+    bytecode_compiler compiler(file);
+    compiler.compile_module(ss);
 
-        Bytecode::load_addr, 0x03, 0x00,
-        Bytecode::call, 0x8,
-
-        Bytecode::halt,
-
-        // add(int a, int b) int
-        Bytecode::add_i32,
-        Bytecode::ret,
-    };
+    bytecode_format bytecode;
+    bytecode.deserialize(ss);
 
     vm_context ctx(4);
-    virtual_machine vm(ctx, std::move(pool), std::move(data));
+    virtual_machine vm(ctx);
+    vm.load_module(bytecode);
+
     int ec = vm.start_execution();
 
     BOOST_LOG_TRIVIAL(trace) << "vm finished with exit code " << ec;
