@@ -75,7 +75,7 @@ void assembler::emit_load_addr(uint16_t index) {
 }
 
 void assembler::emit_load_rel_i32(uint16_t offset) {
-    write_unaligned_data8(Bytecode::load_rel_i32);
+    write_unaligned_data8(Bytecode::load_local_i32);
     write_unaligned_data16(offset);
 }
 

@@ -76,7 +76,7 @@ int vm_proc::eval_loop() {
                 push(std::bit_cast<uint64_t>(vm.read_const_uint64_t(index)));
                 break;
             }
-            case Bytecode::load_rel_i32: {
+            case Bytecode::load_local_i32: {
                 auto fp_offset = std::bit_cast<int16_t>(read_instr_uint16_t());
                 auto load_addr = fp + fp_offset;
                 int32_t value;
