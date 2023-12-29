@@ -28,6 +28,22 @@ TEST_F(SharedObjectTest, ShouldFinalizeWhenWeakRefPresent) {
     ref2.release();
 }
 
+TEST_F(SharedObjectTest, WeakPtrAquare) {
+    strong_ref ref = make_object(10);
+    weak_ref ref2;
+    weak_ref ref3;
+    ref2.from(ref);
+    ref3.acquire(ref2);
+
+    EXPECT_TRUE(ref.release());
+    EXPECT_TRUE(ref2.expired());
+    EXPECT_TRUE(ref3.expired());
+
+    ref.finalize();
+    ref2.release();
+    ref3.release();
+}
+
 TEST_F(SharedObjectTest, WeakRefPromoteToStrong) {
     strong_ref ref = make_object(10);
     weak_ref ref2;
@@ -54,7 +70,7 @@ TEST_F(SharedObjectTest, WeakRefPromoteToStrongFailure) {
     strong_ref ref3 = ref2.lock();
     EXPECT_FALSE(ref3);
     EXPECT_EQ(ref2.use_count(), 0);
-
+    EXPECT_TRUE(ref2.expired());
     ref2.release();
 }
 

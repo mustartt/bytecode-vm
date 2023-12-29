@@ -6,8 +6,8 @@ find_package(Boost 1.74 COMPONENTS fiber log REQUIRED)
 find_package(GTest REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer")
-#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 --coverage")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 --coverage")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include_directories(include)
