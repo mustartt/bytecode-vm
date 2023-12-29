@@ -14,14 +14,14 @@ int virtual_machine::start_execution() {
     int exit_code = 0;
     ctx.start_parent([&exit_code, this] {
         vm_proc proc(*this, program_data[0].data());
+        BOOST_LOG_TRIVIAL(trace) << "fiber: " << boost::this_fiber::get_id()
+                                 << " eval_loop() started";
         exit_code = proc.eval_loop();
     });
     return exit_code;
 }
 
 int vm_proc::eval_loop() {
-    BOOST_LOG_TRIVIAL(trace) << "fiber: " << boost::this_fiber::get_id()
-                             << " eval_loop() started";
     while (true) {
         uint8_t opcode = read_instr_uint8_t();
         switch (opcode) {

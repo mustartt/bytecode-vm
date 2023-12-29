@@ -22,7 +22,6 @@ main([str])i32:
 
 
 section data
-    reserve vtable_identifier       u16         $6 $7 $8 ; offset into the const pool
     reserve mutex_identifier        mutex
     reserve condvar_identifier      condvar
     reserve buf_chan_identifier     bufchan

@@ -64,6 +64,7 @@ enable_testing()
 add_executable(
         main_test
         test/test_main.cpp
+        test/common/shared_object_test.cpp
         test/assembler/src_loc_test.cpp
         test/assembler/bytecode_format_test.cpp
         test/assembler/assembler_test.cpp

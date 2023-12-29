@@ -50,17 +50,24 @@ class strong_ref {
         }
     }
 
-    void release(std::function<void(void *)> &&deleter) noexcept {
-        if (!ref) return;
+    /** @brief release the strong reference and notify if object can be destructed
+     *
+     * @note must call finalize() to free the memory when destructor is done running
+     */
+    bool release() noexcept {
+        BOOST_ASSERT_MSG(ref, "strong_ref::release can only be used on empty strong_ref");
         if (get_ctrlblk().dec_strong() == 1) {
             std::atomic_thread_fence(std::memory_order_acquire);
-            deleter(get_buf()); // destruct the managed object
-            if (get_ctrlblk().dec_weak() == 1) {
-                std::atomic_thread_fence(std::memory_order_acquire);
-                operator delete(ref); // free memory after all weak_ref are released
-            }
+            return true; // destruct the managed object
         }
-        ref = nullptr;
+        return false;
+    }
+
+    void finalize() noexcept {
+        if (get_ctrlblk().dec_weak() == 1) {
+            std::atomic_thread_fence(std::memory_order_acquire);
+            operator delete(ref); // free memory after all weak_ref are released
+        }
     }
 
   private:

@@ -16,13 +16,7 @@ class bytecode_compiler {
 
   public:
     void compile_module(std::ostream &os);
-
-  private:
     void compile_code(const section &sect);
-    void compile_data(const section &sect);
-    void compile_const(const section &sect);
-
-  private:
 
     void compile_instr(const instruction &instr);
 
@@ -44,12 +38,13 @@ class bytecode_compiler {
 
   private:
     tokenizer token_stream;
-    parser p;
-    assembler a;
+    parser par;
+    assembler builder;
     std::unordered_map<
         std::string,
         std::function<void(const instruction &instr)>
     > instr_desc;
+    std::unordered_map<std::string, size_t> type_size;
 };
 
 }

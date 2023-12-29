@@ -13,7 +13,7 @@ namespace vm {
  * Core Data Types
  *  Numbers: i8, i16, i32, i64, f32, f64
  *  Reference: Shared Reference and Array
- *  Sync: mutex, condvar, bufchan, unbufchan, barrier, waitgroup
+ *  Sync: mutex, condvar, bufchan, unbufchan, barrier
  */
 class Bytecode {
   public:
@@ -44,8 +44,9 @@ class Bytecode {
          * @param fund_addr address of the function called
          */
         call = 0x09,
+        call_native,
 
-        ret = 0x0a,
+        ret = 0x0,
         load_addr = 0x0b,
         load_rel_i32 = 0x0c,
 
