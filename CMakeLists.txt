@@ -6,8 +6,8 @@ find_package(Boost 1.74 COMPONENTS fiber log REQUIRED)
 find_package(GTest REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 --coverage")
-#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 --coverage")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 include_directories(include)
@@ -31,6 +31,7 @@ add_library(
         include/assembler/bytecode_compiler.h
         src/assembler/bytecode_compiler.cpp
         include/assembler/bytecode_format.h
+        src/assembler/assembler_instr.cpp
 )
 target_link_libraries(assembly PUBLIC ${Boost_LIBRARIES})
 
@@ -48,11 +49,11 @@ add_executable(
         src/main.cpp
         src/vm/vm_context.cpp
         include/vm/virtual_machine.h
-        include/common.h
+        include/common/common.h
         include/vm/vm_proc.h
         include/vm/vm_proc.h
         src/vm/virtual_machine.cpp
-        include/common/shared_object.h
+        include/vm/shared_object.h
         include/vm/bytecode_linker.h
         include/vm/memory.h
 )

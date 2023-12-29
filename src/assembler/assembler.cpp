@@ -4,7 +4,6 @@
 
 #include <cstring>
 
-#include "common.h"
 #include "assembler/assembler.h"
 
 namespace vm {
@@ -25,58 +24,6 @@ void assembler::write_data(void *value, std::size_t size) {
 void assembler::align_data() {
     auto padding = Assembler_Alignment - (bytecode.data.size() % Assembler_Alignment);
     reserve_data_bytes(padding % Assembler_Alignment);
-}
-
-void assembler::emit_halt() {
-    write_unaligned_data8(Bytecode::halt);
-}
-
-void assembler::emit_const_i32(uint16_t index) {
-    write_unaligned_data8(Bytecode::const_i32);
-    write_unaligned_data16(index);
-}
-
-void assembler::emit_add_i32() {
-    write_unaligned_data8(Bytecode::add_i32);
-}
-
-void assembler::emit_sub_i32() {
-    write_unaligned_data8(Bytecode::sub_i32);
-}
-
-void assembler::emit_mul_i32() {
-    write_unaligned_data8(Bytecode::mul_i32);
-}
-
-void assembler::emit_div_i32() {
-    write_unaligned_data8(Bytecode::div_i32);
-}
-
-void assembler::emit_rem_i32() {
-    write_unaligned_data8(Bytecode::rem_i32);
-}
-
-void assembler::emit_pop_i32() {
-    write_unaligned_data8(Bytecode::pop_i32);
-}
-
-void assembler::emit_call(uint16_t arg_size) {
-    write_unaligned_data8(Bytecode::call);
-    write_unaligned_data16(arg_size);
-}
-
-void assembler::emit_ret() {
-    write_unaligned_data8(Bytecode::ret);
-}
-
-void assembler::emit_load_addr(uint16_t index) {
-    write_unaligned_data8(Bytecode::load_addr);
-    write_unaligned_data16(index);
-}
-
-void assembler::emit_load_rel_i32(uint16_t offset) {
-    write_unaligned_data8(Bytecode::load_local_i32);
-    write_unaligned_data16(offset);
 }
 
 void assembler::register_label(const std::string &symbol) {

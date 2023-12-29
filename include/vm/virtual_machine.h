@@ -7,7 +7,7 @@
 
 #include <atomic>
 
-#include "common.h"
+#include "common/common.h"
 #include "memory.h"
 #include "vm_context.h"
 #include "bytecode_linker.h"

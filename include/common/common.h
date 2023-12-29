@@ -24,7 +24,7 @@ namespace vm {
  * Core Data Types
  *  Numbers: i8, i16, i32, i64, f32, f64
  *  Reference: Shared Reference and Array
- *  Sync: mutex, condvar, bufchan, unbufchan, barrier
+ *  Sync: mutex, condvar, bufchan, unbufchan
  */
 class Bytecode {
   public:
@@ -108,17 +108,16 @@ class Bytecode {
         convert_i8_i32,
         convert_i16_i32,
         convert_i32_i8,
-        convert_i32_i16,
-        /* conversions between int and floating types */
         convert_i32_i64,
+        convert_i32_i16,
         convert_i32_f32,
         convert_i32_f64,
+        convert_i64_i32,
         convert_i64_f32,
         convert_i64_f64,
-        convert_f32_f64,
-        convert_i64_i32,
         convert_f32_i32,
         convert_f32_i64,
+        convert_f32_f64,
         convert_f64_i32,
         convert_f64_i64,
         convert_f64_f32,
@@ -127,10 +126,10 @@ class Bytecode {
         cmp_i64,
         cmp_f32,
         cmp_f64,
-        cmp_ref,
-        cmp_array,
-        cmp_ref_null,
-        cmp_array_null,
+        cmp_ref, // todo: add to assembler
+        cmp_array, // todo: add to assembler
+        cmp_ref_null, // todo: add to assembler
+        cmp_array_null, // todo: add to assembler
 
         new_ref,
         acquire_ref,
@@ -197,20 +196,23 @@ class Bytecode {
         load_array_unbufchan,
         load_local_unbufchan,
 
-        /**
-         * @brief @code call $arg_size @endcode
+        /** @brief @code call $arg_size @endcode
+         * Sets up the stack frame and pass control flow to the called function.
+         * The first byte pointed by func_addr must be a valid instruction and
+         * in a valid memory page.
          *
-         * Stack Effect: arg1, arg2, ..., func_addr -> res1, ...
+         * Stack Effect: [arg1, arg2, ..., func_addr] -> [res1, ...]
          *
          * @param arg_size  the size (in bytes) of the arguments passed to the called function
-         * @param fund_addr address of the function called
+         * @param func_addr address of the function called
          */
         call,
+
         call_native,
         ret,
-        branch,
-
         load_addr,
+
+        branch,
 
         if_eq0_i32,
         if_ne0_i32,

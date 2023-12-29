@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include "common/shared_object.h"
+#include "vm/shared_object.h"
 
 using namespace vm;
 

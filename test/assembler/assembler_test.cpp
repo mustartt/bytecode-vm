@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "assembler/assembler.h"
-#include "common.h"
+#include "common/common.h"
 
 using namespace vm;
 

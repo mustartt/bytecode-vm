@@ -92,6 +92,17 @@ class assembler {
 
     // instructions
     void emit_halt();
+    void emit_nop();
+
+    // primitive: i8
+    void emit_const_i8(uint16_t index);
+    void emit_convert_i8_i32();
+
+    // primitive: i16
+    void emit_const_i16(uint16_t index);
+    void emit_convert_i16_i32();
+
+    // primitive: i32
     void emit_const_i32(uint16_t index);
     void emit_add_i32();
     void emit_sub_i32();
@@ -99,10 +110,108 @@ class assembler {
     void emit_div_i32();
     void emit_rem_i32();
     void emit_pop_i32();
+    void emit_load_i32();
+    void emit_load_offset_i32(uint16_t offset);
+    void emit_load_array_i32();
+    void emit_load_local_i32(uint16_t offset);
+    void emit_store_i32();
+    void emit_store_offset_i32(uint16_t offset);
+    void emit_store_array_i32();
+    void emit_store_local_i32(uint16_t offset);
+    void emit_convert_i32_i8();
+    void emit_convert_i32_i16();
+    void emit_convert_i32_i64();
+    void emit_convert_i32_f32();
+    void emit_convert_i32_f64();
+    void emit_cmp_i32();
+
+    // primitive: i64
+    void emit_const_i64(uint16_t index);
+    void emit_add_i64();
+    void emit_sub_i64();
+    void emit_mul_i64();
+    void emit_div_i64();
+    void emit_rem_i64();
+    void emit_pop_i64();
+    void emit_load_i64();
+    void emit_load_offset_i64(uint16_t offset);
+    void emit_load_array_i64();
+    void emit_load_local_i64(uint16_t offset);
+    void emit_store_i64();
+    void emit_store_offset_i64(uint16_t offset);
+    void emit_store_array_i64();
+    void emit_store_local_i64(uint16_t offset);
+    void emit_convert_i64_i32();
+    void emit_convert_i64_f32();
+    void emit_convert_i64_f64();
+    void emit_cmp_i64();
+
+    // primitive: f32
+    void emit_const_f32(uint16_t index);
+    void emit_add_f32();
+    void emit_sub_f32();
+    void emit_mul_f32();
+    void emit_div_f32();
+    void emit_rem_f32();
+    void emit_pop_f32();
+    void emit_load_f32();
+    void emit_load_offset_f32(uint16_t offset);
+    void emit_load_array_f32();
+    void emit_load_local_f32(uint16_t offset);
+    void emit_store_f32();
+    void emit_store_offset_f32(uint16_t offset);
+    void emit_store_array_f32();
+    void emit_store_local_f32(uint16_t offset);
+    void emit_convert_f32_i32();
+    void emit_convert_f32_i64();
+    void emit_convert_f32_f64();
+    void emit_cmp_f32();
+
+    // primitive: f64
+    void emit_const_f64(uint16_t index);
+    void emit_add_f64();
+    void emit_sub_f64();
+    void emit_mul_f64();
+    void emit_div_f64();
+    void emit_rem_f64();
+    void emit_pop_f64();
+    void emit_load_f64();
+    void emit_load_offset_f64(uint16_t offset);
+    void emit_load_array_f64();
+    void emit_load_local_f64(uint16_t offset);
+    void emit_store_f64();
+    void emit_store_offset_f64(uint16_t offset);
+    void emit_store_array_f64();
+    void emit_store_local_f64(uint16_t offset);
+    void emit_convert_f64_i32();
+    void emit_convert_f64_i64();
+    void emit_convert_f64_f32();
+    void emit_cmp_f64();
+
+    // basic control flow
+    void emit_branch(uint16_t index);
+
+    void emit_if_eq0_i32();
+    void emit_if_ne0_i32();
+    void emit_if_lt0_i32();
+    void emit_if_ge0_i32();
+    void emit_if_gte0_i32();
+    void emit_if_lte0_i32();
+
+    void emit_if_cmp_eq_i32();
+    void emit_if_cmp_ne_i32();
+    void emit_if_cmp_lt_i32();
+    void emit_if_cmp_gt_i32();
+    void emit_if_cmp_lte_i32();
+    void emit_if_cmp_gte_i32();
+
+    // function control flow
     void emit_call(uint16_t arg_size);
+    void emit_call_native(uint16_t arg_size);
     void emit_ret();
+
+    // other
     void emit_load_addr(uint16_t index);
-    void emit_load_rel_i32(uint16_t offset);
 
     // data
     void write_unaligned_data8(uint8_t value) { write_data(&value, sizeof(value)); }
